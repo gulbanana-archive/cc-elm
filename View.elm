@@ -14,4 +14,4 @@ Task: redefine `display` to use the GameState you defined in part 2.
 ------------------------------------------------------------------------------}
 
 view : (Int,Int) -> Model.GameState -> Html
-view (w,h) gameState = p [] [text gameState.text]
+view (w,h) gameState = p [style [("font-family", "Courier New")]] [text gameState.text]
