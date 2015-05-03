@@ -17,14 +17,13 @@ type alias UserInput = {}
 
 
 userInput : Signal UserInput
-userInput =
-    Signal.constant {}
+userInput = Signal.constant {}
 
 
-type alias Input =
-    { timeDelta : Float
-    , userInput : UserInput
-    }
+type alias Input = { 
+    timeDelta : Float,
+    userInput : UserInput
+}
 
 
 
@@ -47,8 +46,7 @@ be an empty list (no objects at the start):
 type alias GameState = {}
 
 defaultGame : GameState
-defaultGame =
-    {}
+defaultGame = {}
 
 
 
@@ -62,9 +60,8 @@ Task: redefine `stepGame` to use the UserInput and GameState
 
 ------------------------------------------------------------------------------}
 
-stepGame : Input -> GameState -> GameState
-stepGame {timeDelta,userInput} gameState =
-    gameState
+update : Input -> GameState -> GameState
+update {timeDelta,userInput} gameState = gameState
 
 
 
@@ -76,9 +73,8 @@ Task: redefine `display` to use the GameState you defined in part 2.
 
 ------------------------------------------------------------------------------}
 
-display : (Int,Int) -> GameState -> Element
-display (w,h) gameState =
-    show gameState
+view : (Int,Int) -> GameState -> Element
+view (w,h) gameState = show gameState
 
 
 
@@ -89,20 +85,16 @@ The following code puts it all together and shows it on screen.
 ------------------------------------------------------------------------------}
 
 delta : Signal Float
-delta =
-    Time.fps 30
+delta = Time.fps 30
 
 
 input : Signal Input
-input =
-    Signal.sampleOn delta (Signal.map2 Input delta userInput)
+input = Signal.sampleOn delta (Signal.map2 Input delta userInput)
 
 
 gameState : Signal GameState
-gameState =
-    Signal.foldp stepGame defaultGame input
+gameState = Signal.foldp update defaultGame input
 
 
 main : Signal Element
-main =
-    Signal.map2 display Window.dimensions gameState
+main = Signal.map2 view Window.dimensions gameState
