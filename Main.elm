@@ -1,4 +1,4 @@
-import Graphics.Element exposing (..)
+import Html exposing (..)
 import Time
 import Window
 import Model exposing (..)
@@ -25,5 +25,5 @@ gameState : Signal GameState
 gameState = Signal.foldp update initialModel input
 
 
-main : Signal Element
+main : Signal Html
 main = Signal.map2 view Window.dimensions gameState
