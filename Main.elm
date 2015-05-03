@@ -6,15 +6,12 @@ import View exposing (..)
 import Update exposing (..)
 
 
-
-{-- That's all folks! ---------------------------------------------------------
-
-The following code puts it all together and shows it on screen.
-
-------------------------------------------------------------------------------}
-
 delta : Signal Float
 delta = Time.fps 60
+
+
+userInput : Signal UserInput
+userInput = Signal.constant {}
 
 
 input : Signal Input
