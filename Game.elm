@@ -30,7 +30,7 @@ init =
 type Action = Reset | Delta Int | BuyClicker Int
 
 update : Action -> Model -> Model
-update a m = case (Debug.watch "action" a) of
+update a m = updateUI (case (Debug.watch "action" a) of
   Reset -> init
   (Delta timeDelta) -> 
     let 
@@ -41,10 +41,7 @@ update a m = case (Debug.watch "action" a) of
     in
         { m | fractions <- fractions `rem` cost
             , clicks <- clicks
-            , idle <- idle
-            , status <- StatusBar.update [m.clickers, clicks, idle] m.status
-            , board <- Board.update (Board.AvailablePurchases (clicks//10)) m.board
-            }
+            , idle <- idle }
   BuyClicker x -> 
     let 
         clickers = m.clickers + x
@@ -53,10 +50,11 @@ update a m = case (Debug.watch "action" a) of
     in
         { m | clickers <- clickers
             , clicks <- clicks
-            , idle <- idle
-            , status <- StatusBar.update [clickers, clicks, idle] m.status
-            , board <- Board.update (Board.AvailablePurchases (clicks//10)) m.board
-            }
+            , idle <- idle })
+
+updateUI : Model -> Model
+updateUI m = { m | status <- StatusBar.update [m.clickers, m.clicks, m.idle] m.status
+                 , board <- Board.update (Board.AvailablePurchases (m.clicks // 10)) m.board }
 
 view : Signal.Address Action -> (Int, Int) -> Model -> Html
 view a (w, h) m = div [style [("height", toString (h-22) ++ "px"), ("display", "flex"), ("flex-direction", "column"), ("align-items", "stretch")]] 
