@@ -4,7 +4,7 @@ import Window
 import Game
 
 
-clock = Signal.map (floor >> Game.Delta) (Time.fps 60)
+clock = Signal.map Game.Delta (Time.fps 60)
 
 
 input = Signal.mailbox Game.Reset

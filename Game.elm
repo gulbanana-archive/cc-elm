@@ -11,7 +11,7 @@ type alias Model =
     , board: Board.Model
     , clickers: Int
     , clicks: Int
-    , fractions: Int
+    , fractions: Float
     , idle: Int 
     }
 
@@ -27,19 +27,20 @@ init =
     , idle = 0 
     }
 
-type Action = Reset | Delta Int | BuyClicker Int
+type Action = Reset | Delta Float | BuyClicker Int
 
 update : Action -> Model -> Model
 update a m = updateUI (case (Debug.watch "action" a) of
   Reset -> init
   (Delta timeDelta) -> 
     let 
-        cost = Debug.watch "click cost" (1000 // m.clickers)
+        cost = Debug.watch "click cost" (1000 / toFloat (m.clickers))
         fractions = Debug.watch "fractional clicks" (m.fractions + timeDelta)
-        clicks = m.clicks + fractions // cost
-        idle = m.idle + timeDelta
+        newClicks = floor (fractions / cost)
+        clicks = m.clicks + newClicks
+        idle = m.idle + floor timeDelta
     in
-        { m | fractions <- fractions `rem` cost
+        { m | fractions <- fractions - (cost * toFloat newClicks)
             , clicks <- clicks
             , idle <- idle }
   BuyClicker x -> 
@@ -53,7 +54,7 @@ update a m = updateUI (case (Debug.watch "action" a) of
             , idle <- idle })
 
 updateUI : Model -> Model
-updateUI m = { m | status <- StatusBar.update [m.clickers, m.clicks, m.idle] m.status
+updateUI m = { m | status <- StatusBar.update [m.clickers, m.clicks, m.idle // 1000] m.status
                  , board <- Board.update (Board.AvailablePurchases (m.clicks // 10)) m.board }
 
 view : Signal.Address Action -> (Int, Int) -> Model -> Html
