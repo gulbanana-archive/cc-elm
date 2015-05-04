@@ -15,6 +15,10 @@ type alias Model =
     , idle: Int 
     }
 
+
+type Action = Reset | Delta Float | BuyClicker Int
+
+
 init : Model
 init = 
     { status = StatusBar.init [("Clickers", "+1 click per second each"), 
@@ -27,7 +31,6 @@ init =
     , idle = 0 
     }
 
-type Action = Reset | Delta Float | BuyClicker Int
 
 update : Action -> Model -> Model
 update a m = updateUI (case (Debug.watch "action" a) of
@@ -53,9 +56,11 @@ update a m = updateUI (case (Debug.watch "action" a) of
             , clicks <- clicks
             , idle <- idle })
 
+
 updateUI : Model -> Model
 updateUI m = { m | status <- StatusBar.update [m.clickers, m.clicks, m.idle // 1000] m.status
                  , board <- Board.update (Board.AvailablePurchases (m.clicks // 10)) m.board }
+
 
 view : Signal.Address Action -> (Int, Int) -> Model -> Html
 view a (w, h) m = div [style [("height", toString (h-22) ++ "px"), ("display", "flex"), ("flex-direction", "column"), ("align-items", "stretch")]] 
