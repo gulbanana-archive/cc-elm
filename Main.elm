@@ -4,13 +4,18 @@ import Window
 import Game
 
 
-input : Signal Game.Action
-input = Signal.map (floor >> Game.Delta) (Time.fps 60)
+clock = Signal.map (floor >> Game.Delta) (Time.fps 60)
+
+
+input = Signal.mailbox Game.Reset
+
+
+actions = Signal.merge clock input.signal
 
 
 gameState : Signal Game.Model
-gameState = Signal.foldp Game.update Game.init input
+gameState = Signal.foldp Game.update Game.init actions
 
 
 main : Signal Html
-main = Signal.map2 Game.view Window.dimensions gameState
+main = Signal.map2 (Game.view input.address) Window.dimensions gameState

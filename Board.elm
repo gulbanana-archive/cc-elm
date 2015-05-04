@@ -1,4 +1,4 @@
-module Board (Model, Action, init, update, view) where
+module Board (Model, Action(..), Context, init, update, view) where
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -8,6 +8,8 @@ type alias Model = Bool
 
 type Action = Enable | Disable
 
+type alias Context = { buy: Signal.Address () }
+
 init : Model
 init = False
 
@@ -16,6 +18,6 @@ update a m = case a of
     Enable -> True
     Disable -> False
 
-view : Model -> Html
-view m = div [style [("display", "flex"), ("flex-direction", "column"), ("justify-content", "center")]] 
-             [button [disabled (not m)] [text "Buy clicker"]]
+view : Context -> Model -> Html
+view context m = div [style [("display", "flex"), ("flex-direction", "column"), ("justify-content", "center")]] 
+                     [button [disabled (not m), onClick context.buy ()] [text "Buy clicker"]]
