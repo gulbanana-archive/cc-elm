@@ -17,7 +17,10 @@ update ns es = map (\(r, n) -> {r | count <- n}) (map2 (,) es ns)
 
 view : Model -> Html
 view pairs = div [style [("font-family", "Courier New"), ("display", "flex")]]
-                 (map viewElem pairs)
+                 (viewHeader :: (map viewElem pairs))
+
+viewHeader : Html
+viewHeader = p [style [("margin-right", "50px"), ("font-size", "18pt"), ("align-self", "center"), ("font-weight", "bold")]] [text "Resources"]
 
 viewElem : StatusElement -> Html
 viewElem r = div [style [("margin-right", "100px")]] 
