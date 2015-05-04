@@ -1,18 +1,16 @@
 import Html exposing (..)
 import Time
 import Window
-import Model exposing (..)
-import View exposing (..)
-import Update exposing (..)
+import Game
 
 
-input : Signal Action
-input = Signal.map Delta (Time.fps 60)
+input : Signal Game.Action
+input = Signal.map Game.Delta (Time.fps 60)
 
 
-gameState : Signal State
-gameState = Signal.foldp update initialModel input
+gameState : Signal Game.Model
+gameState = Signal.foldp Game.update Game.init input
 
 
 main : Signal Html
-main = Signal.map2 view Window.dimensions gameState
+main = Signal.map2 Game.view Window.dimensions gameState
