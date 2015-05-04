@@ -1,10 +1,13 @@
 module Game (Model, Action(..), init, update, view) where
 
 import Html exposing (..)
+import Html.Attributes exposing (..)
 import StatusBar
+import Board
 
 type alias Model = 
     { status: StatusBar.Model
+    , board: Board.Model
     , clickers: Int
     , clicks: Int
     , clickUpdate: Int
@@ -16,6 +19,7 @@ init =
     { status = StatusBar.init [("Clickers", "+1 click per second each"), 
                                ("Clicks", "used to buy clickers"), 
                                ("Idle", "accumulates when not buying")]
+    , board = Board.init
     , clickers = 1
     , clicks = 0
     , clickUpdate = 0
@@ -37,4 +41,8 @@ update (Delta timeDelta) m =
             , status <- StatusBar.update [m.clickers, clicks, idle] m.status }
 
 view : (Int, Int) -> Model -> Html
-view (w, h) m = StatusBar.view m.status
+view (w, h) m = div [style [("height", toString (h-22) ++ "px"), ("display", "flex"), ("flex-direction", "column"), ("align-items", "stretch")]] 
+                    [ div [] [StatusBar.view m.status]
+                    , div [style [("flex", "1"), ("display", "flex"), ("align-content", "stretch"), ("justify-content", "center")]] [Board.view m.board]
+                    , div [style [("align-items", "flex-end")]] [StatusBar.view m.status]
+                    ]
