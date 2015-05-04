@@ -4,11 +4,11 @@ import List exposing (map, map2)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 
-type alias Model = List (String, Int)
+type alias Model = List ((String, String), Int)
 
 type alias Action = List Int
 
-init : List String -> Model
+init : List (String, String) -> Model
 init texts = map (\t -> (t, 0)) texts 
 
 update : Action -> Model -> Model
@@ -18,5 +18,5 @@ view : Model -> Html
 view pairs = div [style [("font-family", "Courier New"), ("display", "flex")]]
                  (map viewPair pairs)
 
-viewPair : (String, Int) -> Html
-viewPair (t, n) = div [style [("margin-right", "100px")]] [text t, text ": ", text (toString n)]
+viewPair : ((String, String), Int) -> Html
+viewPair ((t, h), n) = div [style [("margin-right", "100px")]] [p [style [("font-size", "18pt")]] [text t, text ": ", text (toString n)], p [] [text h]]

@@ -13,7 +13,9 @@ type alias Model =
 
 init : Model
 init = 
-    { status = StatusBar.init ["Clickers", "Clicks", "Idle"]
+    { status = StatusBar.init [("Clickers", "+1 click per second each"), 
+                               ("Clicks", "used to buy clickers"), 
+                               ("Idle", "accumulates when not buying")]
     , clickers = 1
     , clicks = 0
     , clickUpdate = 0
