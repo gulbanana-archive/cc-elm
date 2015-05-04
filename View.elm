@@ -6,5 +6,8 @@ import Html.Events exposing (..)
 import Model
 
 
-view : (Int,Int) -> Model.GameState -> Html
-view (w,h) gameState = p [style [("font-family", "Courier New")]] [text gameState.text]
+view : (Int,Int) -> Model.State -> Html
+view (w,h) gameState = 
+    div [style [("font-family", "Courier New")]]
+        [p [] [text "Clickers: ", text (toString gameState.clickers), text " (", text (toString gameState.clickers), text " click per second)"],
+         p [] [text "Clicks: ", text (toString gameState.clicks)]]

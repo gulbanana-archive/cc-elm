@@ -1,13 +1,15 @@
 module Model where
 
 
-type alias GameState = 
-    { elapsed: Float
-    , text: String
+type alias State = 
+    { clickers: Int
+    , clicks: Int
     }
 
-initialModel : GameState
+type Action = Delta Float
+
+initialModel : State
 initialModel = 
-    { elapsed = 0
-    , text = "Hello, Elm"
+    { clickers = 1
+    , clicks = 0
     }
