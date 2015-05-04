@@ -3,20 +3,36 @@ module Game (Model, Action(..), init, update, view) where
 import Html exposing (..)
 import StatusBar
 
-type alias Model = { status: StatusBar.Model, clickers: Int, clicks: Int }
+type alias Model = 
+    { status: StatusBar.Model
+    , clickers: Int
+    , clicks: Int
+    , clickUpdate: Int
+    , idle: Int 
+    }
 
 init : Model
-init = { status = StatusBar.init ["Clickers", "Clicks", "Idles"], clickers = 1, clicks = 0 }
+init = 
+    { status = StatusBar.init ["Clickers", "Clicks", "Idle"]
+    , clickers = 1
+    , clicks = 0
+    , clickUpdate = 0
+    , idle = 0 
+    }
 
-type Action = Delta Float
+type Action = Delta Int
 
 update : Action -> Model -> Model
-update (Delta timeDelta) state = 
+update (Delta timeDelta) m = 
     let 
-        clicks = state.clicks + state.clickers
+        clickUpdate = (m.clickUpdate + timeDelta) `rem` 1000
+        clicks = m.clicks + (m.clickUpdate + timeDelta) // 1000
+        idle = m.idle + timeDelta
     in
-        {state | clicks <- clicks, 
-                 status <- StatusBar.update [state.clickers, clicks, 0] state.status }
+        { m | clickUpdate <- clickUpdate
+            , clicks <- clicks
+            , idle <- idle
+            , status <- StatusBar.update [m.clickers, clicks, idle] m.status }
 
 view : (Int, Int) -> Model -> Html
 view (w, h) m = StatusBar.view m.status

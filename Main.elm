@@ -5,7 +5,7 @@ import Game
 
 
 input : Signal Game.Action
-input = Signal.map Game.Delta (Time.fps 60)
+input = Signal.map (floor >> Game.Delta) (Time.fps 60)
 
 
 gameState : Signal Game.Model
